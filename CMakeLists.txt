@@ -10,3 +10,5 @@ add_subdirectory(external/csfml)
 add_subdirectory(src)
 
 target_include_directories(${PROJECT_NAME} PUBLIC external/csfml/include PUBLIC include)
+
+add_subdirectory(tests)
