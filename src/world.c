@@ -4,6 +4,8 @@
 
 #include <SFML/Graphics.h>
 
+#include <dummy.h>
+
 void initWorld(World *w)
 {
   sfTexture *background = sfTexture_createFromFile(w->level, NULL);
@@ -26,7 +28,9 @@ World *generateWorld(WorldConfig c)
   return world;
 }
 
-void renderWorld(World *w)
+void renderWorld(World *w, void *obj, unsigned int count)
 {
+  Dummy *d = (Dummy *)obj;
   sfRenderWindow_drawSprite(w->context->_window, w->background, NULL); // TODO: factor low-level api out
+  sfRenderWindow_drawSprite(w->context->_window, d->sprite, NULL);     // TODO: factor low-level api out
 }

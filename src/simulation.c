@@ -1,5 +1,6 @@
 #include <simulation.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void initSimulation(Simulation *s)
 {
@@ -12,6 +13,13 @@ void initSimulation(Simulation *s)
       "../../assets/stage.png",
       s->context};
   s->world = generateWorld(worldConfig);
+
+  DummyConfig d;
+  d.position[0] = 100.f;
+  d.position[1] = 530.f;
+  d.spritePath = "../../assets/car.png";
+
+  s->dummy = generateDummy(d);
 }
 
 Simulation *generateSimulation(SimulationConfig config)
@@ -37,13 +45,43 @@ void simulationMainLoop(Simulation *s)
         closeContext(s->context);
         break;
       }
+
+      if (sfKeyboard_isKeyPressed(sfKeyW))
+      {
+        acceleratePhysicsBody(s->dummy->body);
+        break;
+      }
+
+      if (sfKeyboard_isKeyPressed(sfKeyS))
+      {
+        deacceleratePhysicsBody(s->dummy->body);
+        break;
+      }
+
+      if (sfKeyboard_isKeyPressed(sfKeyD))
+      {
+        rotateRightPhysicsBody(s->dummy->body);
+        break;
+      }
+
+      if (sfKeyboard_isKeyPressed(sfKeyA))
+      {
+        rotateLeftPhysicsBody(s->dummy->body);
+        break;
+      }
     }
 
     /* Clear the screen */
     clearContext(s->context);
 
+    // Update Dummies
+    updateDummy(s->dummy);
+
+    // s->dummy->rotation += 0.1f;
+    // sfSprite_setRotation(s->dummy->sprite, s->dummy->rotation);
+
     // Render world
-    renderWorld(s->world);
+    renderWorld(s->world, (void *)s->dummy, 1);
 
     /* Update the window */
     updateContext(s->context);

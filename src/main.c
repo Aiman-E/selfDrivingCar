@@ -7,5 +7,5 @@ int main()
 
   simulationMainLoop(simulation);
 
-    return 0;
+  return 0;
 }

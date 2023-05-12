@@ -3,6 +3,7 @@
     "*.tcc": "c",
     "cstdlib": "c",
     "memory": "c",
-    "cstring": "c"
+    "cstring": "c",
+    "math.h": "c"
   }
 }
