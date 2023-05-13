@@ -1,10 +1,7 @@
-#define _USE_MATH_DEFINES
 #include <stdlib.h>
-#include <math.h>
 
+#include <core.h>
 #include <physicsBody.h>
-
-#define TO_RAD(x) x *M_PI / 180.0
 
 void initPhysicsBody(PhysicsBody *b)
 {
@@ -40,13 +37,13 @@ void deacceleratePhysicsBody(PhysicsBody *b)
 }
 void rotateLeftPhysicsBody(PhysicsBody *b)
 {
-  b->rotation += TO_RAD(4);
+  b->rotation -= TO_RAD(4);
   updatePhysicsBody(b);
 }
 
 void rotateRightPhysicsBody(PhysicsBody *b)
 {
-  b->rotation -= TO_RAD(4);
+  b->rotation += TO_RAD(4);
   updatePhysicsBody(b);
 }
 

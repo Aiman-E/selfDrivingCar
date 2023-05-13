@@ -57,4 +57,20 @@ Simulation *generateSimulation(SimulationConfig config);
  */
 void simulationMainLoop(Simulation *s);
 
+/**
+ * @brief Check if car has collided
+ *
+ * @param s : Simulation
+ * @return unsigned char
+ */
+unsigned char checkCollision(Simulation *s);
+
+/**
+ * @brief Spawn dummy to world
+ *
+ * @param s : Simulation
+ * @return Dummy*
+ */
+Dummy *simulationSpawnDummy(Simulation *s);
+
 #endif // __SIMULATION_H__

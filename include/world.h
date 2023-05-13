@@ -31,7 +31,8 @@ typedef struct World
 {
   char *level;
   Context *context;
-  sfSprite *background;
+  sfSprite *backgroundSprite;
+  sfImage *backgroundImage;
 } World;
 
 /**

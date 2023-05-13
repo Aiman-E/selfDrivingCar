@@ -14,12 +14,7 @@ void initSimulation(Simulation *s)
       s->context};
   s->world = generateWorld(worldConfig);
 
-  DummyConfig d;
-  d.position[0] = 100.f;
-  d.position[1] = 530.f;
-  d.spritePath = "../../assets/car.png";
-
-  s->dummy = generateDummy(d);
+  s->dummy = simulationSpawnDummy(s);
 }
 
 Simulation *generateSimulation(SimulationConfig config)
@@ -29,6 +24,25 @@ Simulation *generateSimulation(SimulationConfig config)
 
   initSimulation(simulation);
   return simulation;
+}
+
+Dummy *simulationSpawnDummy(Simulation *s)
+{
+  DummyConfig d;
+  d.position[0] = 200.f;
+  d.position[1] = 540.f;
+  d.spritePath = "../../assets/car.png";
+
+  s->dummy = generateDummy(d);
+
+  RadarConfig r;
+  r.distance = 1000;
+  r.position[0] = s->dummy->position[0];
+  r.position[1] = s->dummy->position[1];
+  r.World = s->world;
+  Radar *radar = generateRadar(r);
+
+  s->dummy->radar = radar;
 }
 
 void simulationMainLoop(Simulation *s)
@@ -77,9 +91,6 @@ void simulationMainLoop(Simulation *s)
     // Update Dummies
     updateDummy(s->dummy);
 
-    // s->dummy->rotation += 0.1f;
-    // sfSprite_setRotation(s->dummy->sprite, s->dummy->rotation);
-
     // Render world
     renderWorld(s->world, (void *)s->dummy, 1);
 
@@ -88,4 +99,9 @@ void simulationMainLoop(Simulation *s)
   }
 
   destroyContext(s->context);
+}
+
+unsigned char checkCollision(Simulation *s)
+{
+  return hasCollided(s->dummy->radar);
 }

@@ -14,6 +14,7 @@
 #include <SFML/Graphics.h>
 
 #include <physicsBody.h>
+#include <radar.h>
 
 /**
  * @brief Dummy object holds position of dummy, physical body, and sprite
@@ -25,6 +26,7 @@ typedef struct Dummy
   PhysicsBody *body;
   char *spritePath;
   sfSprite *sprite;
+  Radar *radar;
 } Dummy;
 
 /**
