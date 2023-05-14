@@ -18,6 +18,7 @@
 typedef struct Radar
 {
   sfVertex directions[5];
+  double power[5];
   World *World;
   float distance;
   float position[2];

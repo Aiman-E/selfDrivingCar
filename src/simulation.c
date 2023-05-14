@@ -36,7 +36,7 @@ Dummy *simulationSpawnDummy(Simulation *s)
   s->dummy = generateDummy(d);
 
   RadarConfig r;
-  r.distance = 1000;
+  r.distance = 70;
   r.position[0] = s->dummy->position[0];
   r.position[1] = s->dummy->position[1];
   r.World = s->world;
@@ -93,6 +93,8 @@ void simulationMainLoop(Simulation *s)
 
     // Render world
     renderWorld(s->world, (void *)s->dummy, 1);
+
+    printf("%f\n", s->dummy->radar->power[1]);
 
     /* Update the window */
     updateContext(s->context);

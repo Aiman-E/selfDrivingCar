@@ -19,6 +19,12 @@ void initRadar(Radar *r)
   r->directions[4].color = sfRed;
 
   r->rotation = 0.0;
+
+  r->power[0] = 0.0;
+  r->power[1] = 0.0;
+  r->power[2] = 0.0;
+  r->power[3] = 0.0;
+  r->power[4] = 0.0;
 }
 
 Radar *generateRadar(RadarConfig c)
@@ -42,7 +48,7 @@ sfVertex *getWallCoords(Radar *r)
                     r->position[1] + x * sin(r->rotation)};
 
     unsigned char front = sfImage_getPixel(r->World->backgroundImage, d.x, d.y).r;
-    if (front != 0)
+    if (front != 0 || x == r->distance)
     {
       r->directions[0].position = d;
       break;
@@ -55,7 +61,7 @@ sfVertex *getWallCoords(Radar *r)
     sfVector2f d = {r->position[0] + x * sin(r->rotation),
                     r->position[1] - x * cos(r->rotation)};
     unsigned char left = sfImage_getPixel(r->World->backgroundImage, d.x, d.y).r;
-    if (left != 0)
+    if (left != 0 || x == r->distance)
     {
       r->directions[1].position = d;
       break;
@@ -68,7 +74,7 @@ sfVertex *getWallCoords(Radar *r)
     sfVector2f d = {r->position[0] - x * sin(r->rotation),
                     r->position[1] + x * cos(r->rotation)};
     unsigned char right = sfImage_getPixel(r->World->backgroundImage, d.x, d.y).r;
-    if (right != 0)
+    if (right != 0 || x == r->distance)
     {
       r->directions[2].position = d;
       break;
@@ -81,7 +87,7 @@ sfVertex *getWallCoords(Radar *r)
     sfVector2f d = {r->position[0] + x * sin(r->rotation + TO_RAD(45.0)),
                     r->position[1] - x * cos(r->rotation + TO_RAD(45.0))};
     unsigned char leftAngled = sfImage_getPixel(r->World->backgroundImage, d.x, d.y).r;
-    if (leftAngled != 0)
+    if (leftAngled != 0 || x == r->distance)
     {
       r->directions[3].position = d;
       break;
@@ -93,8 +99,8 @@ sfVertex *getWallCoords(Radar *r)
   {
     sfVector2f d = {r->position[0] - x * sin(r->rotation - TO_RAD(45.0)),
                     r->position[1] + x * cos(r->rotation - TO_RAD(45.0))};
-    unsigned char right = sfImage_getPixel(r->World->backgroundImage, d.x, d.y).r;
-    if (right != 0)
+    unsigned char rightAngled = sfImage_getPixel(r->World->backgroundImage, d.x, d.y).r;
+    if (rightAngled != 0 || x == r->distance)
     {
       r->directions[4].position = d;
       break;
@@ -110,9 +116,21 @@ unsigned char hasCollided(Radar *r)
   return pos ? 1 : 0;
 }
 
+// Helper function
+void updatePower(Radar *r)
+{
+  for (int i = 0; i < 5; i++)
+  {
+    double dx = r->directions[i].position.x - r->position[0];
+    double dy = r->directions[i].position.y - r->position[1];
+    r->power[i] = sqrt(dx * dx + dy * dy);
+  }
+}
+
 void updateRadar(Radar *r, float x, float y, float rotation)
 {
   r->position[0] = x;
   r->position[1] = y;
   r->rotation = rotation;
+  updatePower(r);
 }
