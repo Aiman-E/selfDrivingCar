@@ -13,6 +13,7 @@
 #include <context.h>
 #include <world.h>
 #include <dummy.h>
+#include <ai/AI.h>
 
 /**
  * @brief Simulation main structure holds everything
@@ -23,7 +24,8 @@ typedef struct Simulation
   Context *context;
   World *world;
   unsigned int numOfDummies;
-  Dummy *dummy;
+  Dummy **dummies;
+  AI *agent;
 } Simulation;
 
 /**
@@ -56,14 +58,6 @@ Simulation *generateSimulation(SimulationConfig config);
  * @param s : Simulation to start
  */
 void simulationMainLoop(Simulation *s);
-
-/**
- * @brief Check if car has collided
- *
- * @param s : Simulation
- * @return unsigned char
- */
-unsigned char checkCollision(Simulation *s);
 
 /**
  * @brief Spawn dummy to world

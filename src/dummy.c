@@ -13,7 +13,7 @@ void initDummy(Dummy *d)
   sfSprite_setPosition(d->sprite, (sfVector2f){d->position[0], d->position[1]});
   sfSprite_setRotation(d->sprite, -90);
   sfSprite_setOrigin(d->sprite, (sfVector2f){320 / 2, 613 / 2}); // This is missed up :)
-  sfSprite_setScale(d->sprite, (sfVector2f){.05f, .05f});
+  sfSprite_setScale(d->sprite, (sfVector2f){.03f, .03f});
 }
 
 Dummy *generateDummy(DummyConfig c)
@@ -21,7 +21,7 @@ Dummy *generateDummy(DummyConfig c)
   Dummy *d = (Dummy *)malloc(sizeof(Dummy));
   d->position[0] = c.position[0];
   d->position[1] = c.position[1];
-  PhysicsBodyConfig bodyConfig = {0.2, 0.5};
+  PhysicsBodyConfig bodyConfig = {1, 3};
   d->body = generatePhysicsBody(bodyConfig);
 
   d->spritePath = c.spritePath;
@@ -38,4 +38,9 @@ void updateDummy(Dummy *d)
                                       d->position[0],
                                       d->position[1]});
   sfSprite_setRotation(d->sprite, TO_DEGREES(d->body->rotation) + 90);
+}
+
+unsigned char checkCollision(Dummy *d)
+{
+  return hasCollided(d->radar);
 }

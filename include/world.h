@@ -33,6 +33,8 @@ typedef struct World
   Context *context;
   sfSprite *backgroundSprite;
   sfImage *backgroundImage;
+  sfVector2f checkpointPosition[45][2];
+  int numOfCheckpoints;
 } World;
 
 /**
@@ -51,12 +53,35 @@ World *generateWorld(WorldConfig config);
 void initWorld(World *w);
 
 /**
+ * @brief Initialize map sectors
+ *
+ * @param w : World
+ */
+void generateSectors(World *w);
+
+/**
+ * @brief Helper function to draw sectors
+ *
+ * @param w : World
+ */
+void drawSectors(World *w);
+
+/**
+ * @brief drawing helper function
+ *
+ * @param w World
+ * @param p1 point1
+ * @param p2 point2
+ */
+void drawLine(World *w, sfVector2f p1, sfVector2f p2);
+
+/**
  * @brief Render to screen
  *
  * @param w : World
  * @param obj : void pointer pointing to list of objects to render
  * @param count : number of elements pointed by @param obj
  */
-void renderWorld(World *w, void *obj, unsigned int count);
+void renderWorld(World *w, void **obj, unsigned int count);
 
 #endif //__WORLD_H__

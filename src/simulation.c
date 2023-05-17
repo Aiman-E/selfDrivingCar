@@ -1,6 +1,7 @@
-#include <simulation.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+#include <simulation.h>
 
 void initSimulation(Simulation *s)
 {
@@ -14,7 +15,16 @@ void initSimulation(Simulation *s)
       s->context};
   s->world = generateWorld(worldConfig);
 
-  s->dummy = simulationSpawnDummy(s);
+  // generete ai agent
+  AIConfig aiConfig = {s->numOfDummies};
+  s->agent = generateAI(aiConfig);
+
+  s->dummies = (Dummy **)malloc(sizeof(Dummy));
+  for (int i = 0; i < s->numOfDummies; i++)
+  {
+    s->dummies[i] = simulationSpawnDummy(s);
+    s->dummies[i]->genume = s->agent->population[i];
+  }
 }
 
 Simulation *generateSimulation(SimulationConfig config)
@@ -29,20 +39,23 @@ Simulation *generateSimulation(SimulationConfig config)
 Dummy *simulationSpawnDummy(Simulation *s)
 {
   DummyConfig d;
-  d.position[0] = 200.f;
+  d.position[0] = 190.f;
   d.position[1] = 540.f;
   d.spritePath = "../../assets/car.png";
 
-  s->dummy = generateDummy(d);
+  Dummy *dummy;
+  dummy = generateDummy(d);
 
   RadarConfig r;
   r.distance = 70;
-  r.position[0] = s->dummy->position[0];
-  r.position[1] = s->dummy->position[1];
+  r.position[0] = dummy->position[0];
+  r.position[1] = dummy->position[1];
   r.World = s->world;
   Radar *radar = generateRadar(r);
 
-  s->dummy->radar = radar;
+  dummy->radar = radar;
+
+  return dummy;
 }
 
 void simulationMainLoop(Simulation *s)
@@ -59,51 +72,21 @@ void simulationMainLoop(Simulation *s)
         closeContext(s->context);
         break;
       }
-
-      if (sfKeyboard_isKeyPressed(sfKeyW))
-      {
-        acceleratePhysicsBody(s->dummy->body);
-        break;
-      }
-
-      if (sfKeyboard_isKeyPressed(sfKeyS))
-      {
-        deacceleratePhysicsBody(s->dummy->body);
-        break;
-      }
-
-      if (sfKeyboard_isKeyPressed(sfKeyD))
-      {
-        rotateRightPhysicsBody(s->dummy->body);
-        break;
-      }
-
-      if (sfKeyboard_isKeyPressed(sfKeyA))
-      {
-        rotateLeftPhysicsBody(s->dummy->body);
-        break;
-      }
     }
 
     /* Clear the screen */
     clearContext(s->context);
 
     // Update Dummies
-    updateDummy(s->dummy);
+    for (int i = 0; i < s->numOfDummies; i++)
+      updateDummy(s->dummies[i]);
 
     // Render world
-    renderWorld(s->world, (void *)s->dummy, 1);
-
-    printf("%f\n", s->dummy->radar->power[1]);
+    renderWorld(s->world, (void **)s->dummies, s->numOfDummies);
 
     /* Update the window */
     updateContext(s->context);
   }
 
   destroyContext(s->context);
-}
-
-unsigned char checkCollision(Simulation *s)
-{
-  return hasCollided(s->dummy->radar);
 }

@@ -15,9 +15,10 @@
 
 #include <physicsBody.h>
 #include <radar.h>
+#include <ai/genome.h>
 
 /**
- * @brief Dummy object holds position of dummy, physical body, and sprite
+ * @brief Dummy object holds position of dummy, physical body, sprint, and genume
  *
  */
 typedef struct Dummy
@@ -27,6 +28,8 @@ typedef struct Dummy
   char *spritePath;
   sfSprite *sprite;
   Radar *radar;
+  Genome *genume;
+
 } Dummy;
 
 /**
@@ -60,5 +63,13 @@ Dummy *generateDummy(DummyConfig c);
  * @param d : Dummy
  */
 void updateDummy(Dummy *d);
+
+/**
+ * @brief Check if car has collided
+ *
+ * @param d : Dummy
+ * @return unsigned char
+ */
+unsigned char checkCollision(Dummy *d);
 
 #endif // __DUMMY_H__
