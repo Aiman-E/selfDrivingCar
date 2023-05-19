@@ -11,6 +11,7 @@
 #ifndef __DUMMY_H__
 #define __DUMMY_H__
 
+#include <time.h>
 #include <SFML/Graphics.h>
 
 #include <physicsBody.h>
@@ -29,7 +30,9 @@ typedef struct Dummy
   sfSprite *sprite;
   Radar *radar;
   Genome *genume;
-
+  unsigned int alive;
+  time_t startingTime;
+  time_t endingTime;
 } Dummy;
 
 /**
@@ -70,6 +73,13 @@ void updateDummy(Dummy *d);
  * @param d : Dummy
  * @return unsigned char
  */
-unsigned char checkCollision(Dummy *d);
+unsigned char dummyCheckCollision(Dummy *d);
+
+/**
+ * @brief Stop dummy
+ *
+ * @param d : Dummy
+ */
+void stopDummy(Dummy *d);
 
 #endif // __DUMMY_H__

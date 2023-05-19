@@ -26,6 +26,7 @@ typedef struct Simulation
   unsigned int numOfDummies;
   Dummy **dummies;
   AI *agent;
+  unsigned int dummiesLeft;
 } Simulation;
 
 /**
@@ -66,5 +67,13 @@ void simulationMainLoop(Simulation *s);
  * @return Dummy*
  */
 Dummy *simulationSpawnDummy(Simulation *s);
+
+/**
+ * @brief
+ *
+ */
+void dummyInsideCheckpoint(Simulation *s, Dummy *d, int i);
+
+void checkCollision(Simulation *s, Dummy *d);
 
 #endif // __SIMULATION_H__

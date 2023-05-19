@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 
 #include <ai/AI.h>
 
@@ -20,19 +21,19 @@ AI *generateAI(AIConfig c)
 
 void generatePopulation(AI *ai)
 {
-  Genome *population[ai->populationSize];
+  Genome **population;
+  population = (Genome **)malloc(sizeof(Genome *) * ai->populationSize);
   GenomeConfig genomeConfig;
-  genomeConfig.distanceWeight = 1;
-  genomeConfig.averageSpeedWeight = 1;
-  genomeConfig.checkpointReachedWeight = 0;
-  genomeConfig.timeTakenForcheckPointWeight = 0;
+  genomeConfig.distanceWeight = 2;
+  genomeConfig.averageSpeedWeight = 4;
+  genomeConfig.checkpointReachedWeight = 5;
+  genomeConfig.timeTakenForcheckPointWeight = 3;
 
   for (int i = 0; i < ai->populationSize; i++)
   {
     population[i] = generateGenome(genomeConfig);
     population[i]->distance = (float)rand() / RAND_MAX * MAGNIFIER;
     population[i]->averageSpeed = (float)rand() / RAND_MAX * MAGNIFIER;
-    population[i]->death = (float)rand() / RAND_MAX * MAGNIFIER > 5 ? 1 : 0;
     population[i]->checkpointsReached = rand() % 5; /** @todo change this to map sections*/
     population[i]->timeTaken = (float)rand() / RAND_MAX * MAGNIFIER;
   }
@@ -40,7 +41,7 @@ void generatePopulation(AI *ai)
   ai->population = population;
 }
 
-Genome **selectpsFromPopulation(AI *ai)
+void selectParentsFromPopulation(AI *ai, Genome *parent1, Genome *parent2)
 {
   int p1, p2 = 0;
   for (int i = 0; i < ai->populationSize; i++)
@@ -57,9 +58,8 @@ Genome **selectpsFromPopulation(AI *ai)
     }
   }
 
-  Genome *parents[] = {ai->population[p1], ai->population[p2]};
-
-  return parents;
+  parent1 = ai->population[p1];
+  parent2 = ai->population[p2];
 }
 
 Genome crossover(Genome *p1, Genome *p2)
@@ -68,7 +68,6 @@ Genome crossover(Genome *p1, Genome *p2)
 
   offspring.distance = (p1->distance + p2->distance) / 2.0f;
   offspring.averageSpeed = (p1->averageSpeed + p2->averageSpeed) / 2.0f;
-  offspring.death = p1->death || p2->death;
   offspring.checkpointsReached = (int)((p1->checkpointsReached + p2->checkpointsReached) / 2);
   offspring.timeTaken = (p1->timeTaken + p2->timeTaken) / 2.0f;
 
@@ -89,14 +88,35 @@ void mutate(Genome *g, float mutationRate)
   }
   if ((float)rand() / RAND_MAX < mutationRate)
   {
-    g->death = g->death ? 0 : 1;
-  }
-  if ((float)rand() / RAND_MAX < mutationRate)
-  {
     g->checkpointsReached = !g->checkpointsReached * 10;
   }
   if ((float)rand() / RAND_MAX < mutationRate)
   {
     g->timeTaken += (float)rand() / RAND_MAX;
   }
+}
+
+void evolveAI(AI *ai)
+{
+  srand(time(NULL)); // seed the generator
+
+  Genome *newPopulation = malloc(sizeof(Genome) * ai->populationSize);
+
+  Genome parents[2];
+  selectParentsFromPopulation(ai, &parents[0], &parents[1]);
+
+  for (int i = 0; i < ai->populationSize; i++)
+  {
+    Genome offspring = crossover(&parents[0], &parents[1]);
+
+    mutate(&offspring, 0.3);
+
+    newPopulation[i] = offspring;
+  }
+
+  newPopulation[0] = parents[0];
+  newPopulation[1] = parents[1];
+
+  free(ai->population);
+  ai->population = newPopulation;
 }

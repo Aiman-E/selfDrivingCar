@@ -4,6 +4,14 @@
 #include <ai/genome.h>
 #include <SFML/Graphics.h>
 
+typedef enum ACTIONS
+{
+  FRONT,
+  LEFT,
+  RIGHT,
+  BRAKE
+} ACTIONS;
+
 typedef struct AIConfig
 {
   unsigned int populationSize;
@@ -40,16 +48,17 @@ void generatePopulation(AI *ai);
 /**
  * @brief select the genome with the highest fitness value for next generation
  *
- * @param ai : AI
- * @return Genome**
+ * @param ai
+ * @param parent1
+ * @param parent2
  */
-Genome **selectParentsFromPopulation(AI *ai);
+void selectParentsFromPopulation(AI *ai, Genome *parent1, Genome *parent2);
 
 /**
  * @brief Mix parent genes and return an offspring
  *
- * @param p1
- * @param p2
+ * @param p1 : Genome parent 1
+ * @param p2 : Genome parent 2
  * @return Genome
  */
 Genome crossover(Genome *p1, Genome *p2);
@@ -62,5 +71,12 @@ Genome crossover(Genome *p1, Genome *p2);
  * @return Genome
  */
 Genome mutation(Genome *g, float mutationRate);
+
+/**
+ * @brief evovle the populaiton
+ *
+ * @param ai : ai
+ */
+void evolveAI(AI *ai);
 
 #endif //__AI_H__

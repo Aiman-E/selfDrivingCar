@@ -86,4 +86,11 @@ void rotateRightPhysicsBody(PhysicsBody *b);
  */
 void updatePhysicsBody(PhysicsBody *b);
 
+/**
+ * @brief Stop physics body from moving
+ *
+ * @param b : PhysicsBody
+ */
+void stopPhysicsBody(PhysicsBody *b);
+
 #endif //__PHYSICSBODY_H__

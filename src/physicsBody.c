@@ -52,3 +52,12 @@ void updatePhysicsBody(PhysicsBody *b)
   b->velocity.x = b->speed * cos(b->rotation);
   b->velocity.y = b->speed * sin(b->rotation);
 }
+
+void stopPhysicsBody(PhysicsBody *b)
+{
+  b->speed = 0;
+  b->velocity.x = b->velocity.y = 0;
+  b->acceleration = 0;
+  b->deacceleration = 0;
+  b->rotation = 0;
+}

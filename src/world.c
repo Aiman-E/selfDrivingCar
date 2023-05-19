@@ -159,6 +159,8 @@ void renderWorld(World *w, void **obj, unsigned int count)
   for (int i = 0; i < count; i++)
   {
     Dummy *d = (Dummy *)obj[i];
+    if (!d->alive)
+      continue;
     sfRenderWindow_drawSprite(w->context->_window, d->sprite, NULL); // TODO: factor low-level api out
 
     sfVector2f dummyPos = sfSprite_getPosition(d->sprite);

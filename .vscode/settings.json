@@ -4,6 +4,14 @@
     "cstdlib": "c",
     "memory": "c",
     "cstring": "c",
-    "math.h": "c"
+    "math.h": "c",
+    "ctime": "c",
+    "limits": "c",
+    "numeric": "c",
+    "streambuf": "c",
+    "tuple": "c",
+    "type_traits": "c",
+    "utility": "c",
+    "genome.h": "c"
   }
 }

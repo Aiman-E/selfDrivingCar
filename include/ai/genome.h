@@ -43,7 +43,6 @@ typedef struct Genome
   AchievementWeights weight;
   float distance;
   float averageSpeed;
-  unsigned char death;
   int checkpointsReached;
   float timeTaken;
 } Genome;
