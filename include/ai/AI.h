@@ -48,20 +48,19 @@ void generatePopulation(AI *ai);
 /**
  * @brief select the genome with the highest fitness value for next generation
  *
- * @param ai
- * @param parent1
- * @param parent2
+ * @param ai : AI
+ * @return int* : index number of parents
  */
-void selectParentsFromPopulation(AI *ai, Genome *parent1, Genome *parent2);
+int *selectParentsFromPopulation(AI *ai);
 
 /**
  * @brief Mix parent genes and return an offspring
  *
- * @param p1 : Genome parent 1
- * @param p2 : Genome parent 2
- * @return Genome
+ * @param p1 : Parent 1
+ * @param p2 : Parent 2
+ * @return Genome*
  */
-Genome crossover(Genome *p1, Genome *p2);
+Genome *crossover(Genome *p1, Genome *p2);
 
 /**
  * @brief mutate genes randomly

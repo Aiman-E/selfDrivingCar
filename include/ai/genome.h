@@ -16,23 +16,22 @@
  */
 typedef struct GenomeConfig
 {
-  float distanceWeight;
-  float averageSpeedWeight;
-  float checkpointReachedWeight;
-  float timeTakenForcheckPointWeight;
+  int sensorsNum;
+  int hiddenNum;
+  int outputNum;
 } GenomeConfig;
 
 /**
- * @brief Achievment weights
+ * @brief Fitness metrics
  *
  */
-typedef struct AchievementWeights
+typedef struct
 {
-  float distanceWeight;
-  float averageSpeedWeight;
-  float checkpointReachedWeight;
-  float timeTakenForcheckPointWeight;
-} AchievementWeights;
+  float distance;
+  float averageSpeed;
+  int checkpointsReached;
+  float timeTaken;
+} FitnessMetrics;
 
 /**
  * @brief Basic gene structure
@@ -40,19 +39,22 @@ typedef struct AchievementWeights
  */
 typedef struct Genome
 {
-  AchievementWeights weight;
-  float distance;
-  float averageSpeed;
-  int checkpointsReached;
-  float timeTaken;
+  FitnessMetrics fitness;
+  float **weights_ih;
+  float **weights_ho;
+  float *biases_h;
+  float *biases_o;
 } Genome;
 
 /**
- * @brief  Initialize the genome
+ * @brief Initilize the genome
  *
  * @param g : Genome
+ * @param sNum : Sensor number
+ * @param hNum : hidden layers
+ * @param oNum : output layers
  */
-void initGenome(Genome *g);
+void initGenome(Genome *g, int sNum, int hNum, int oNum);
 
 /**
  * @brief Generate genome and allocate it to heap
