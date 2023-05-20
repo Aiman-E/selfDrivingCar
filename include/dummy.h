@@ -82,4 +82,11 @@ unsigned char dummyCheckCollision(Dummy *d);
  */
 void stopDummy(Dummy *d);
 
+/**
+ * @brief Respawn dummy
+ *
+ * @param d : Dummy
+ */
+void restartDummy(Dummy *d, float x, float y);
+
 #endif // __DUMMY_H__

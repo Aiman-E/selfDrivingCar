@@ -76,4 +76,10 @@ void dummyInsideCheckpoint(Simulation *s, Dummy *d, int i);
 
 void checkCollision(Simulation *s, Dummy *d);
 
+void moveDummies(Simulation *s);
+
+void updateAI(Simulation *s);
+
+void restartPopulation(Simulation *s);
+
 #endif // __SIMULATION_H__

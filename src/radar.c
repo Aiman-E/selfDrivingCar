@@ -39,7 +39,7 @@ Radar *generateRadar(RadarConfig c)
   return r;
 }
 
-sfVertex *getWallCoords(Radar *r)
+void updateWallCoords(Radar *r)
 {
   // Front
   for (float x = 0.f; x <= r->distance; x++)
@@ -106,8 +106,6 @@ sfVertex *getWallCoords(Radar *r)
       break;
     }
   }
-
-  return r->directions;
 }
 
 unsigned char hasCollided(Radar *r)
@@ -124,6 +122,7 @@ void updatePower(Radar *r)
     double dx = r->directions[i].position.x - r->position[0];
     double dy = r->directions[i].position.y - r->position[1];
     r->power[i] = sqrt(dx * dx + dy * dy);
+    r->power[i] /= r->distance;
   }
 }
 

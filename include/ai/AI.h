@@ -4,13 +4,13 @@
 #include <ai/genome.h>
 #include <SFML/Graphics.h>
 
-typedef enum ACTIONS
+typedef enum ACTION
 {
   FRONT,
   LEFT,
   RIGHT,
   BRAKE
-} ACTIONS;
+} ACTION;
 
 typedef struct AIConfig
 {
@@ -21,6 +21,7 @@ typedef struct AI
 {
   Genome **population;
   unsigned int populationSize;
+  ACTION *actions;
 } AI;
 
 /**
@@ -56,11 +57,11 @@ int *selectParentsFromPopulation(AI *ai);
 /**
  * @brief Mix parent genes and return an offspring
  *
+ * @param offspring : offspring
  * @param p1 : Parent 1
  * @param p2 : Parent 2
- * @return Genome*
  */
-Genome *crossover(Genome *p1, Genome *p2);
+void crossover(Genome *offspring, Genome *p1, Genome *p2);
 
 /**
  * @brief mutate genes randomly
@@ -72,10 +73,19 @@ Genome *crossover(Genome *p1, Genome *p2);
 Genome mutation(Genome *g, float mutationRate);
 
 /**
- * @brief evovle the populaiton
+ * @brief evolve the populaiton
  *
- * @param ai : ai
+ * @param ai : AI
  */
 void evolveAI(AI *ai);
+
+/**
+ * @brief Train the neural network and return an action
+ *
+ * @param g : Genome
+ * @param inputs : sensors' data
+ * @return ACTION
+ */
+ACTION trainAI(Genome *g, float *inputs);
 
 #endif //__AI_H__

@@ -51,9 +51,8 @@ void initRadar(Radar *r);
  * @brief Get the Wall Coords
  *
  * @param r : Radar
- * @return sfVector2f* containing five elements(front, left, right, angled left, angled right)
  */
-sfVertex *getWallCoords(Radar *r);
+void updateWallCoords(Radar *r);
 
 /**
  * @brief Checks if owner object has collided

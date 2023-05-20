@@ -36,15 +36,12 @@ Dummy *generateDummy(DummyConfig c)
 void updateDummy(Dummy *d)
 {
   // Drawing updates
-  d->position[0] += WORLD_TO_PIXEL(d->body->velocity.x);
-  d->position[1] += WORLD_TO_PIXEL(d->body->velocity.y);
+  d->position[0] += METER_TO_PIXEL(d->body->velocity.x);
+  d->position[1] += METER_TO_PIXEL(d->body->velocity.y);
   sfSprite_setPosition(d->sprite, (sfVector2f){
                                       d->position[0],
                                       d->position[1]});
   sfSprite_setRotation(d->sprite, TO_DEGREES(d->body->rotation) + 90);
-
-  // genome updates
-  d->genume->averageSpeed += d->body->speed;
 }
 
 unsigned char dummyCheckCollision(Dummy *d)
@@ -55,5 +52,40 @@ unsigned char dummyCheckCollision(Dummy *d)
 void stopDummy(Dummy *d)
 {
   stopPhysicsBody(d->body);
+
+  d->alive = 0;
+
   d->endingTime = time(0);
+  d->genume->fitness.timeTaken = d->endingTime - d->startingTime;
+}
+
+void restartDummy(Dummy *d, float x, float y)
+{
+  d->position[0] = x;
+  d->position[1] = y;
+
+  d->body->rotation = 0;
+  d->body->acceleration = 1.0;
+  d->body->deacceleration = 3.0;
+
+  d->alive = 1;
+  d->startingTime = time(0);
+  d->endingTime = 0;
+
+  d->radar->directions[0].position = (sfVector2f){0.f, 0.f};
+  d->radar->directions[1].position = (sfVector2f){0.f, 0.f};
+  d->radar->directions[2].position = (sfVector2f){0.f, 0.f};
+  d->radar->directions[3].position = (sfVector2f){0.f, 0.f};
+  d->radar->directions[4].position = (sfVector2f){0.f, 0.f};
+  d->radar->power[0] = 0.0;
+  d->radar->power[1] = 0.0;
+  d->radar->power[2] = 0.0;
+  d->radar->power[3] = 0.0;
+  d->radar->power[4] = 0.0;
+  d->radar->position[0] = d->position[0] / 1.3f;
+  d->radar->position[1] = d->position[1] / 1.3f;
+  d->radar->rotation = 0.0;
+
+  sfSprite_setPosition(d->sprite, (sfVector2f){d->position[0], d->position[1]});
+  sfSprite_setRotation(d->sprite, -90);
 }

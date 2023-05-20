@@ -1,28 +1,25 @@
 #include <stdlib.h>
 #include <math.h>
+#include <stdio.h>
 
 #include <ai/genome.h>
 
-#define getRandomNumber() (float)rand() / RAND_MAX
-
-void initGenome(Genome *g, int sNum, int hNum, int oNum)
+void initGenome(Genome *g)
 {
-  g->fitness.distance = 0.f;
-  g->fitness.averageSpeed = 0.f;
   g->fitness.checkpointsReached = 0;
   g->fitness.timeTaken = 0.f;
 
-  for (int i = 0; i < sNum; i++)
-    for (int j = 0; j < hNum; j++)
-      g->weights_ih[i][j] = getRandomNumber();
+  for (int i = 0; i < g->sensorsNum; i++)
+    for (int j = 0; j < g->hiddenNum; j++)
+      g->weights_ih[i][j] = (float)rand() / (float)RAND_MAX;
 
-  for (int i = 0; i < hNum; i++)
+  for (int i = 0; i < g->hiddenNum; i++)
   {
-    g->biases_h[i] = getRandomNumber();
-    for (int j = 0; j < oNum; j++)
+    g->biases_h[i] = (float)rand() / (float)RAND_MAX;
+    for (int j = 0; j < g->outputNum; j++)
     {
-      g->biases_o[j] = getRandomNumber();
-      g->weights_ho[i][j] = getRandomNumber();
+      g->biases_o[j] = (float)rand() / (float)RAND_MAX;
+      g->weights_ho[i][j] = (float)rand() / (float)RAND_MAX;
     }
   }
 }
@@ -36,11 +33,16 @@ Genome *generateGenome(GenomeConfig c)
 
   g->weights_ho = (float **)malloc(sizeof(float *) * c.hiddenNum);
   for (int i = 0; i < c.hiddenNum; i++)
-    g->weights_ih[i] = (float *)malloc(sizeof(float) * c.outputNum);
+    g->weights_ho[i] = (float *)malloc(sizeof(float) * c.outputNum);
 
   g->biases_h = (float *)malloc(sizeof(float) * c.hiddenNum);
   g->biases_o = (float *)malloc(sizeof(float) * c.outputNum);
-  initGenome(g, c.sensorsNum, c.hiddenNum, c.outputNum);
+
+  g->sensorsNum = c.sensorsNum;
+  g->hiddenNum = c.hiddenNum;
+  g->outputNum = c.outputNum;
+
+  initGenome(g);
 
   return g;
 }
@@ -48,9 +50,7 @@ Genome *generateGenome(GenomeConfig c)
 float genomeFitness(Genome *g)
 {
   float fitnesss = 0.f;
-  fitnesss += g->fitness.distance;
-  fitnesss += g->fitness.averageSpeed;
-  fitnesss += g->fitness.checkpointsReached;
+  fitnesss += g->fitness.checkpointsReached * 3;
   fitnesss += g->fitness.timeTaken;
   return fitnesss;
 }

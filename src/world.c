@@ -167,13 +167,13 @@ void renderWorld(World *w, void **obj, unsigned int count)
     dummyPos.x /= 1.3f;
     dummyPos.y /= 1.3f;
     updateRadar(d->radar, dummyPos.x, dummyPos.y, d->body->rotation);
-    sfVertex *directions = getWallCoords(d->radar);
+    updateWallCoords(d->radar);
 
     for (int i = 0; i < 5; i++)
     {
       drawLine(w,
                (sfVector2f){dummyPos.x * 1.3f, dummyPos.y * 1.3f},
-               (sfVector2f){directions[i].position.x * 1.3f, directions[i].position.y * 1.3f});
+               (sfVector2f){d->radar->directions[i].position.x * 1.3f, d->radar->directions[i].position.y * 1.3f});
     }
   }
 }

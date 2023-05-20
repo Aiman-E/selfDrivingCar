@@ -27,8 +27,6 @@ typedef struct GenomeConfig
  */
 typedef struct
 {
-  float distance;
-  float averageSpeed;
   int checkpointsReached;
   float timeTaken;
 } FitnessMetrics;
@@ -44,17 +42,18 @@ typedef struct Genome
   float **weights_ho;
   float *biases_h;
   float *biases_o;
+
+  int sensorsNum;
+  int hiddenNum;
+  int outputNum;
 } Genome;
 
 /**
  * @brief Initilize the genome
  *
  * @param g : Genome
- * @param sNum : Sensor number
- * @param hNum : hidden layers
- * @param oNum : output layers
  */
-void initGenome(Genome *g, int sNum, int hNum, int oNum);
+void initGenome(Genome *g);
 
 /**
  * @brief Generate genome and allocate it to heap
